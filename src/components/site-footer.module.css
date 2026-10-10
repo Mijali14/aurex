@@ -1,0 +1,25 @@
+.footer { border-top: 1px solid var(--color-border); background: var(--color-background); padding: 64px 0 24px; }
+.container { width: calc(100% - var(--page-gutter) * 2); max-width: var(--page-max); margin: 0 auto; }
+.top { display: grid; grid-template-columns: minmax(260px,.85fr) minmax(0,1.4fr); gap: 64px; }
+.wordmark { display: flex; align-items: baseline; gap: 4px; font-size: 25px; font-weight: 650; line-height: 1; letter-spacing: .095em; margin: 0; }
+.wordmark > span { width: 4px; height: 4px; background: var(--color-signal); }
+.brand > p:nth-child(2) { font-size: 14px; line-height: 1.7; color: var(--color-secondary); margin: 20px 0 8px; }
+.signature { font-size: 11px; color: var(--color-tertiary); line-height: 1.8; }
+.navigation { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 48px; max-width: 420px; width: 100%; justify-self: end; }
+.group h2 { font-size: 12px; font-weight: 500; line-height: 1.5; margin: 0 0 12px; }
+.group ul { list-style: none; padding: 0; margin: 0; }
+.group a, .group button, .group li > span { display: flex; align-items: center; min-height: 44px; font-size: 13px; line-height: 1.5; color: var(--color-secondary); padding: 10px 0; }
+.group button { background: none; border: 0; text-align: left; }
+.group a:hover, .group button:hover { color: var(--color-foreground); }
+.group a:focus-visible, .group button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; border-radius: 2px; }
+.group li > span { color: var(--color-tertiary); }
+.bottom { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid var(--color-border); padding-top: 24px; margin-top: 48px; font-size: 11px; color: var(--color-tertiary); line-height: 1.7; }
+@media (max-width: 1000px) { .top { grid-template-columns: 1fr; gap: 36px; } .navigation { justify-self: start; } }
+@media (max-width: 760px) {
+  .footer { padding: 40px 0 24px; }
+  .top { gap: 28px; }
+  .brand > p:nth-child(2) { margin-top: 16px; font-size: 13px; }
+  .navigation { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
+  .group h2 { margin-bottom: 6px; }
+  .bottom { margin-top: 28px; padding-top: 20px; gap: 12px; }
+}

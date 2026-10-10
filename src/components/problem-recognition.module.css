@@ -1,0 +1,71 @@
+.section { border-top: 1px solid var(--color-border); padding: 112px 0 80px; }
+.container { width: calc(100% - var(--page-gutter) * 2); max-width: var(--page-max); margin: 0 auto; }
+.editorial { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.9fr); grid-template-areas: "intro visual" "problems visual"; column-gap: clamp(48px,7vw,120px); align-items: start; }
+.intro { grid-area: intro; }
+.intro h2 { font-size: clamp(32px,3vw,46px); font-weight: 550; line-height: 1.15; letter-spacing: -.04em; margin: 0; max-width: 640px; }
+.intro h2 span { display: block; color: var(--color-secondary); margin-bottom: 8px; }
+.intro > p { font-size: 16px; line-height: 1.75; color: var(--color-secondary); max-width: 500px; margin: 24px 0 36px; }
+.problems { grid-area: problems; list-style: none; margin: 0; padding: 0; }
+.problems li { display: flex; gap: 20px; border-top: 1px solid var(--color-border); padding: 18px 0; }
+.number { font-family: var(--font-geist-mono),monospace; color: var(--color-tertiary); font-size: 12px; line-height: 24px; }
+.problems h3 { font-size: 17px; font-weight: 500; line-height: 1.4; margin: 0 0 5px; }
+.problems p { font-size: 14px; line-height: 1.65; color: var(--color-secondary); margin: 0; max-width: 460px; }
+.visual { grid-area: visual; background: var(--color-elevated); border: 1px solid var(--color-border); border-radius: 12px; padding: 28px; align-self: center; min-width: 0; }
+.visualHeading { display: flex; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 32px; }
+.visualHeading h3 { font-size: 23px; font-weight: 500; line-height: 1.25; letter-spacing: -.03em; margin: 0; }
+.visualHeading > span { font-size: 11px; color: var(--color-secondary); line-height: 1.6; text-align: right; }
+.enquiries { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.enquiries thead th { text-align: left; font-size: 12px; font-weight: 500; color: var(--color-secondary); padding: 0 0 14px; border-bottom: 1px solid var(--color-border); }
+.enquiries thead th:first-child { width: 61%; }
+.enquiries thead th:last-child { color: #a5cdff; }
+.enquiries tbody th { text-align: left; font-size: 13px; font-weight: 400; color: var(--color-secondary); padding: 17px 0; border-bottom: 1px solid var(--color-border); }
+.enquiries td { position: relative; border-bottom: 1px solid var(--color-border); font-size: 11px; }
+.visitorDot { display: inline-block; width: 5px; height: 5px; margin-right: 10px; border-radius: 50%; background: #657080; vertical-align: middle; }
+.status { display: inline-block; color: #b9c3d1; font-family: var(--font-geist-mono),monospace; font-size: 11px; letter-spacing: .015em; padding: 5px 0; }
+.hot { color: #a5cdff; background: #203b60; border-radius: 4px; padding: 5px 8px; }
+.pending { display: none; color: var(--color-secondary); position: absolute; top: 50%; transform: translateY(-50%); font-size: 11px; }
+.qualified { border-left: 2px solid #639fe9; padding: 0 0 0 18px; margin-top: 28px; }
+.qualifiedHeading { display: flex; flex-direction: column; gap: 9px; }
+.qualifiedHeading > span { font-family: var(--font-geist-mono),monospace; font-size: 10px; letter-spacing: .055em; color: #a5cdff; }
+.qualifiedHeading strong { font-size: 20px; line-height: 1.3; font-weight: 500; }
+.qualified ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; padding: 0; margin: 18px 0; }
+.qualified li { font-size: 13px; line-height: 1.5; color: #dbe7f7; }
+.qualified li::before { content: ""; display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: #639fe9; margin-right: 7px; vertical-align: middle; }
+.qualified p { color: var(--color-secondary); font-size: 12px; line-height: 1.6; margin: 0; }
+.visualNote { font-size: 12px; line-height: 1.65; color: var(--color-secondary); margin: 24px 0 0; padding-top: 20px; border-top: 1px solid var(--color-border); }
+.insight { max-width: 1000px; margin: 96px auto 0; text-align: center; }
+.central { font-size: clamp(32px,3.4vw,50px); font-weight: 500; line-height: 1.15; letter-spacing: -.04em; margin: 0; }
+.explanation { color: var(--color-secondary); font-size: 17px; line-height: 1.7; margin: 24px 0 0; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+/* A single three-second pass distinguishes the enquiries. Text remains in the accessibility tree. */
+.visual[data-entered="true"] .status { animation: classify 350ms ease-out both; animation-delay: calc(350ms + var(--order) * 450ms); }
+.visual[data-entered="true"] .pending { display: block; animation: understood 1ms both; animation-delay: calc(350ms + var(--order) * 450ms); }
+.visual[data-entered="true"] .qualified { animation: classify 400ms ease-out both; animation-delay: 2400ms; }
+@keyframes classify { from { opacity: 0; } to { opacity: 1; } }
+@keyframes understood { from { opacity: 1; } to { opacity: 0; } }
+@media (max-width: 1050px) {
+  .editorial { grid-template-columns: 1fr 1fr; column-gap: 36px; }
+  .visual { padding: 22px; }
+  .qualified ul { grid-template-columns: 1fr; gap: 8px; }
+}
+@media (max-width: 760px) {
+  .section { padding: 64px 0 48px; }
+  .editorial { grid-template-columns: minmax(0,1fr); grid-template-areas: "intro" "visual" "problems"; gap: 32px; }
+  .intro h2 { font-size: 32px; }
+  .intro > p { font-size: 15px; margin: 20px 0 0; line-height: 1.7; }
+  .visual { padding: 20px; }
+  .visualHeading { margin-bottom: 28px; }
+  .visualHeading h3 { font-size: 21px; }
+  .visualHeading > span { max-width: 72px; }
+  .enquiries tbody th { font-size: 12px; padding: 15px 0; }
+  .visitorDot { margin-right: 7px; }
+  .problems li { gap: 16px; padding: 16px 0; }
+  .problems h3 { font-size: 16px; }
+  .insight { margin-top: 48px; text-align: left; }
+  .central { font-size: 32px; }
+  .explanation { font-size: 15px; margin-top: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .visual[data-entered="true"] .status, .visual[data-entered="true"] .qualified { animation: none; }
+  .visual[data-entered="true"] .pending { display: none; }
+}

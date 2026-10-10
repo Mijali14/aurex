@@ -1,0 +1,99 @@
+.section {
+  border-top: 1px solid var(--color-border);
+  padding: 112px 0 80px;
+  /* The global scroll padding already accounts for the sticky navigation. */
+  scroll-margin-top: 0;
+}
+
+.section:focus { outline: none; }
+.section:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -6px; }
+.container { width: calc(100% - var(--page-gutter) * 2); max-width: var(--page-max); margin: 0 auto; }
+.intro { display: grid; grid-template-columns: 1.25fr .75fr; align-items: end; gap: 64px; margin-bottom: 64px; }
+.intro h2 { font-size: clamp(32px, 2.8vw, 44px); line-height: 1.16; letter-spacing: -.04em; font-weight: 550; margin: 0; }
+.intro h2 span { color: #b9c3d1; }
+.intro > p { max-width: 420px; margin: 0 0 3px; color: var(--color-secondary); font-size: 16px; line-height: 1.75; }
+
+/* One shared rail connects the stages; only the final opportunity is enclosed. */
+.flow { list-style: none; display: grid; grid-template-columns: minmax(0,.95fr) minmax(0,1fr) minmax(0,1.05fr) minmax(0,1.05fr) minmax(0,1.15fr); gap: 28px; position: relative; padding: 0; margin: 0; }
+.flow::before { content: ""; position: absolute; left: 5px; right: 5px; top: 5px; height: 1px; background: var(--color-border); }
+.stage { position: relative; min-width: 0; }
+.node { display: block; position: relative; width: 11px; height: 11px; border: 1px solid #596779; background: var(--color-background); border-radius: 50%; }
+.stageTitle { display: flex; gap: 10px; align-items: baseline; font-size: 15px; line-height: 1.4; font-weight: 550; margin: 19px 0 24px; }
+.stageNumber { font-size: 11px; font-family: var(--font-geist-mono), monospace; color: var(--color-tertiary); font-weight: 400; }
+.stageBody { min-width: 0; }
+.stageDescription { font-size: 15px; line-height: 1.65; color: var(--color-secondary); margin: 0; }
+.opportunity .stageDescription { margin-top: 12px; font-size: 14px; }
+.bodyHeading { font-size: 14px; line-height: 1.55; font-weight: 500; margin: 0 0 14px; }
+.visitorQuote { font-size: 16px; color: var(--color-secondary); line-height: 1.65; margin: 0; }
+.agentQuote { font-size: 14px; line-height: 1.65; color: #dbe7f7; margin: 0; padding-left: 12px; border-left: 1px solid #4d719e; }
+.responseLabel { display: block; color: var(--color-tertiary); font-size: 12px; margin-top: 12px; }
+.intentSignal { display: flex; align-items: center; gap: 6px; color: var(--color-secondary); font-size: 12px; line-height: 1.5; margin: 18px 0 0; }
+.intentSignal svg { width: 13px; color: var(--color-signal); }
+.outcomeStage .node { background: var(--color-signal); border-color: var(--color-signal); }
+.opportunity { padding: 20px; background: var(--color-elevated); border: 1px solid #33485f; border-radius: 12px; }
+.outcomeLabel { margin: 0; color: #dbe7f7; font-size: 15px; line-height: 1.45; font-weight: 550; }
+.ending { display: flex; align-items: center; justify-content: space-between; gap: 32px; margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--color-border); }
+.ending p { margin: 0; color: var(--color-secondary); font-size: 16px; line-height: 1.7; }
+.ending strong { font-weight: 500; color: var(--color-foreground); }
+.ending > span { flex-shrink: 0; font-size: 12px; color: var(--color-tertiary); }
+.mobileBreak { display: none; }
+
+/* Content stays readable before and during the brief one-time reveal. */
+.flow[data-entered="true"] .stageBody,
+.flow[data-entered="true"] .node { animation: stageReveal 400ms ease-out both; animation-delay: calc(var(--stage-order) * 120ms); }
+@keyframes stageReveal { from { opacity: .45; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (min-width: 1680px) {
+  .flow { gap: 36px; }
+  .stageTitle { font-size: 16px; }
+  .bodyHeading, .agentQuote { font-size: 15px; }
+  .visitorQuote { font-size: 17px; }
+  .opportunity { padding: 24px; }
+  .outcomeLabel { font-size: 17px; }
+}
+@media (max-width: 1350px) and (min-width: 1200px) {
+  .flow { gap: 22px; }
+  .intro { gap: 40px; }
+  .stageTitle { font-size: 14px; gap: 7px; }
+  .opportunity { padding: 16px; }
+}
+@media (max-width: 1199px) {
+  .section { padding: 80px 0 64px; }
+  .intro { grid-template-columns: 1fr; gap: 24px; margin-bottom: 44px; }
+  .intro > p { max-width: 560px; }
+  .flow { grid-template-columns: 1fr; gap: 0; max-width: 760px; margin: 0 auto; }
+  .flow::before { top: 5px; bottom: 0; left: 5px; right: auto; width: 1px; height: auto; }
+  .stage { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 24px; padding: 0 0 40px 32px; }
+  .stage:last-child { padding-bottom: 0; }
+  .node { position: absolute; top: 5px; left: 0; }
+  .stageTitle { align-self: start; margin: 0; padding-top: 1px; }
+  .flow::before { bottom: 5px; }
+  .stage:last-child::before { content: ""; position: absolute; top: 16px; bottom: 0; left: 0; width: 11px; background: var(--color-background); }
+  .outcomeStage { padding-bottom: 0; }
+  .ending { margin-top: 40px; }
+}
+@media (max-width: 599px) {
+  .section { padding: 64px 0 48px; }
+  .intro { gap: 22px; margin-bottom: 36px; }
+  .intro h2 { font-size: 30px; line-height: 1.16; letter-spacing: -.035em; }
+  .intro > p { font-size: 16px; line-height: 1.7; }
+  .stage { display: block; padding: 0 0 30px 28px; }
+  .stageTitle { font-size: 15px; margin-bottom: 15px; }
+  .stageNumber { font-size: 11px; }
+  .bodyHeading { font-size: 14px; margin-bottom: 10px; }
+  .visitorQuote { font-size: 15px; line-height: 1.6; }
+  .agentQuote { font-size: 15px; line-height: 1.6; }
+  .responseLabel { margin-top: 9px; }
+  .intentSignal { margin-top: 14px; font-size: 13px; }
+  .opportunity { padding: 20px; }
+  .outcomeLabel { font-size: 16px; }
+  .ending { flex-direction: column; align-items: flex-start; gap: 18px; padding-top: 24px; margin-top: 32px; }
+  .ending p { font-size: 15px; }
+  .mobileBreak { display: block; }
+}
+@media (max-width: 359px) {
+  .intro h2 { font-size: 27px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow .stageBody, .flow .node { animation: none !important; transform: none !important; opacity: 1 !important; }
+}

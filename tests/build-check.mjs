@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import { parseSiteUrl } from "../src/lib/site-url.ts";
+const html=readFileSync(".next/server/app/index.html","utf8");
+const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+for (const [,id] of html.matchAll(/href="#([^"]*)"/g)) assert.ok(id && ids.has(id),`Broken anchor: ${id}`);
+assert.equal([...html.matchAll(/<h1[\s>]/g)].length,1);
+assert.match(html,/AUREX — AI Sales Agent for Your Website/);
+assert.match(html,/name="twitter:card" content="summary_large_image"/);
+const origin=parseSiteUrl(process.env.SITE_URL);
+const robots=readFileSync(".next/server/app/robots.txt.body","utf8");
+const sitemap=readFileSync(".next/server/app/sitemap.xml.body","utf8");
+if (origin) {
+  assert.equal(html.match(/rel="canonical" href="([^"]+)"/)?.[1],origin.href);
+  assert.ok(html.includes(`property="og:image" content="${origin.href}og.png"`));
+  assert.ok(html.includes(`name="twitter:image" content="${origin.href}og.png"`));
+  assert.ok(sitemap.includes(`<loc>${origin.href}</loc>`));
+  assert.ok(robots.includes(`Sitemap: ${origin.href}sitemap.xml`));
+  assert.match(html,/name="robots" content="index, follow"/);
+} else {
+  assert.doesNotMatch(html,/rel="canonical"/);
+  assert.match(html,/name="robots" content="noindex, nofollow"/);
+  assert.match(robots,/Disallow: \//);
+  assert.doesNotMatch(sitemap,/<loc>/);
+}
+const notFound=readFileSync(".next/server/app/_not-found.html","utf8");
+assert.match(notFound,/Page not found/); assert.match(notFound,/noindex/); assert.doesNotMatch(notFound,/rel="canonical"/);
+for (const [,asset] of html.matchAll(/(?:src|href)="(\/_next\/static\/[^"?]*)/g)) assert.ok(existsSync(join(".next",asset.replace("/_next/",""))),`Missing asset: ${asset}`);
+const walk=path=>readdirSync(path,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(join(path,e.name)):[join(path,e.name)]);
+const files=walk(".next/static");
+assert.ok(!files.some(p=>/\.map$|\.env/.test(p)));
+const client=files.filter(p=>p.endsWith(".js")).map(p=>readFileSync(p,"utf8")).join("\n");
+for(const forbidden of [/SUPABASE_SERVICE_ROLE_KEY/, /RESEND_API_KEY/, /DEMO_HASH_SECRET/, /api\.resend\.com/, /rest\/v1\/rpc/, /simulated confirmation/, /mode:"preview"/]) assert.doesNotMatch(client,forbidden);
+assert.match(client,/\/api\/demo-requests/);
+assert.doesNotMatch(client,/https?:\/\/(?:localhost|127\.0\.0\.1)[^"\s]*\/api\/demo-requests/);
+const png=readFileSync("public/og.png"); assert.equal(png.readUInt32BE(16),1200); assert.equal(png.readUInt32BE(20),630);
+const routes=JSON.parse(readFileSync(".next/server/app-paths-manifest.json","utf8"));
+assert.ok(routes["/api/demo-requests/route"]);
+console.log("Production checks passed: anchors, metadata, assets, server route and client boundary.");
