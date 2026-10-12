@@ -1,4 +1,5 @@
 import type { MouseEvent } from "react";
+import Link from "next/link";
 import styles from "./site-footer.module.css";
 
 type FooterProps = {
@@ -29,9 +30,9 @@ export function SiteFooter({ onProduct, onHowItWorks, onFaq, onRequestDemo }: Fo
       <nav className={styles.navigation} aria-label="Footer navigation">
         <div className={styles.group}><h2>Product</h2><ul><li><a href="#capabilities" onClick={event => navigate(event, onProduct)}>Product</a></li><li><a href="#how-it-works" onClick={event => navigate(event, onHowItWorks)}>How It Works</a></li><li><a href="#faq" onClick={event => navigate(event, onFaq)}>FAQ</a></li><li><button type="button" onClick={onRequestDemo}>Request a Demo</button></li></ul></div>
         <div className={styles.group}><h2>Solutions</h2><ul><li><a href="#property-example" onClick={event => navigate(event, showProperty)}>Property</a></li></ul></div>
-        {/* Company, contact, and legal links stay omitted until real destinations exist. */}
+        {/* Company and other legal links stay omitted until real destinations exist. */}
       </nav>
     </div>
-    <div className={styles.bottom}><span>© {new Date().getFullYear()} AUREX</span><span>All rights reserved.</span></div>
+    <div className={styles.bottom}><span>© {new Date().getFullYear()} AUREX</span><Link href="/privacy" className={styles.privacy}>Privacy Policy</Link><span>All rights reserved.</span></div>
   </div></footer>;
 }

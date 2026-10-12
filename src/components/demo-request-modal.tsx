@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { DemoRequestValidationError, submitDemoRequest } from "@/lib/demo-request";
 import { Icon } from "./icon";
+import Link from "next/link";
 
 export function DemoRequestModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -96,7 +97,7 @@ export function DemoRequestModal({ open, onClose }: { open: boolean; onClose: ()
                 <label className="full-width">What do you want AUREX to help with? <span>(optional)</span><textarea name="message" rows={3} placeholder="Tell us what a better sales conversation would look like." maxLength={1000} /></label>
               </div>
               {status === "error" && <p ref={errorMessage} tabIndex={-1} className="form-error" role="alert">{error}</p>}
-              <p className="form-disclosure" id="demo-disclosure">AUREX will use the information you provide to respond to your demo request.</p>
+              <p className="form-disclosure" id="demo-disclosure">By submitting this form, you agree that AUREX may use the information provided to respond to your request and follow up about AUREX. See our <Link href="/privacy">Privacy Policy</Link>.</p>
               <span className="sr-only" role="status">{status === "submitting" ? "Sending your demo request." : ""}</span>
               <button className="button button-primary submit-button" type="submit" disabled={status === "submitting"} aria-describedby="demo-disclosure">{status === "submitting" ? "Sending…" : "Request Demo"}<Icon name="arrow" /></button>
             </form>

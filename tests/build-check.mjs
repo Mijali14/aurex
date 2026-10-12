@@ -3,6 +3,13 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { parseSiteUrl } from "../src/lib/site-url.ts";
 const html=readFileSync(".next/server/app/index.html","utf8");
+const privacy=readFileSync(".next/server/app/privacy.html","utf8");
+assert.equal([...privacy.matchAll(/<h1[\s>]/g)].length,1);
+assert.match(privacy,/<title>Privacy Policy \| AUREX<\/title>/);
+assert.match(privacy,/Learn how AUREX handles information submitted through its website and demo request process\./);
+assert.match(privacy,/datetime="2026-10-12"/i);
+assert.match(privacy,/href="mailto:mifzaljr14@gmail.com"/);
+assert.match(html,/href="\/privacy"/);
 const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
 for (const [,id] of html.matchAll(/href="#([^"]*)"/g)) assert.ok(id && ids.has(id),`Broken anchor: ${id}`);
 assert.equal([...html.matchAll(/<h1[\s>]/g)].length,1);
@@ -16,6 +23,9 @@ if (origin) {
   assert.ok(html.includes(`property="og:image" content="${origin.href}og.png"`));
   assert.ok(html.includes(`name="twitter:image" content="${origin.href}og.png"`));
   assert.ok(sitemap.includes(`<loc>${origin.href}</loc>`));
+  assert.ok(sitemap.includes(`<loc>${new URL('/privacy',origin).href}</loc>`));
+  assert.ok(privacy.includes(`rel="canonical" href="${new URL('/privacy',origin).href}"`));
+  assert.match(privacy,/name="robots" content="index, follow"/);
   assert.ok(robots.includes(`Sitemap: ${origin.href}sitemap.xml`));
   assert.match(html,/name="robots" content="index, follow"/);
 } else {
@@ -23,6 +33,7 @@ if (origin) {
   assert.match(html,/name="robots" content="noindex, nofollow"/);
   assert.match(robots,/Disallow: \//);
   assert.doesNotMatch(sitemap,/<loc>/);
+  assert.match(privacy,/name="robots" content="noindex, nofollow"/);
 }
 const notFound=readFileSync(".next/server/app/_not-found.html","utf8");
 assert.match(notFound,/Page not found/); assert.match(notFound,/noindex/); assert.doesNotMatch(notFound,/rel="canonical"/);
